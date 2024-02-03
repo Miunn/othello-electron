@@ -3,23 +3,16 @@ import Pin from "./Pin";
 import "./styles/Square.css";
 
 interface Props {
-    currentPlayer: SetStateAction<"black" | "white" | "transparent">,
     onClickCallback: Function,
-    defaultColor: "black" | "white" | "transparent",
+    color: "black" | "white" | "transparent",
     index: number,
 };
 
-function Square({currentPlayer, onClickCallback, defaultColor, index}: Props) {
+function Square({onClickCallback, color, index}: Props) {
 
-    const [color, setColor] = useState<"black"|"white"|"transparent">(defaultColor);
-
-    const onClickSquare = () => {
-        setColor(currentPlayer);
-        onClickCallback(index);
-    }
 
     return (
-        <div className="Square" onClick={onClickSquare}>
+        <div className="Square" onClick={() => onClickCallback(index)}>
             {color !== "transparent" ? <Pin color={color} /> : null}
         </div>
     )

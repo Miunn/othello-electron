@@ -1,12 +1,12 @@
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Square from "./Square";
 import CurrentPlayer from "./CurrentPlayer";
 import "./styles/Board.css";
-import { copyFile, copyFileSync } from "fs";
 
 type SquareType = {
     index: number,
     color: "black" | "white" | "transparent",
+    highlightColor: "black" | "white" | "transparent",
 }
 
 enum DirectionType {
@@ -34,6 +34,7 @@ function Board() {
             squares.push({
                 index: i,
                 color: defaultColor,
+                highlightColor: "transparent",
             });
         }
 
@@ -262,9 +263,27 @@ function Board() {
         setCurrentPlayer(currentPlayer === "black" ? "white" : "black");
     }
 
+    const highlightValidMoves = () => {
+        for (let i = 0; i < 64; i++) {
+            squares[i].highlightColor = "transparent";
+
+            if (squares[i].color !== "transparent") continue;
+            if (getValidDirection(i, currentPlayer).length === 0) continue;
+
+            console.log("Highlight index:", i, "color:", currentPlayer);
+            squares[i].highlightColor = currentPlayer;
+        }
+    }
+
     useEffect(() => {
         setSquares(initSquares());
     }, []);
+
+    useEffect(() => {
+        console.log("Moves for:", currentPlayer, "squares:", squares);
+        if (squares.length > 0)
+            highlightValidMoves();
+    }, [currentPlayer]);
 
     return (
         <div className="Board">
@@ -275,6 +294,7 @@ function Board() {
                     <Square
                         key={sq.index}
                         color={sq.color}
+                        highlightColor={sq.highlightColor}
                         index={sq.index}
                         onClickCallback={play}
                     />

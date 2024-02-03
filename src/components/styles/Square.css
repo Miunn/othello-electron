@@ -13,8 +13,3 @@
     cursor: pointer;
 }
 
-.Square-object {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-}

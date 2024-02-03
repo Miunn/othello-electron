@@ -1,14 +1,22 @@
 .Board {
+    box-sizing: border-box;
     background-color: rgb(105,157,76);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 20% 1fr 20%;
     align-items: center;
-    justify-content: center;
+    justify-items: center;
+
+    padding: 40px;
 }
 
 .Board-Wrapper {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
+}
+
+.Current-Wrapper {
+    align-self: flex-start;
+    
 }

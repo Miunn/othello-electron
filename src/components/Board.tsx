@@ -86,7 +86,6 @@ function Board() {
         // DTR
         for (let i = index - 7; i > index + 8 - (index % 8) - (7-index%8)*8 && i >= 0; i -= 7) {
             const currPin = squares[i].color;
-            console.log(currPin, index);
 
             if (currPin === "transparent") break;
             if (currPin === color && index - i > 7) {
@@ -237,10 +236,8 @@ function Board() {
 
     const switchPinsDTL = (color: "black"|"white", index: number) => {
         // DTL
-        console.log("Switch DTL for index:", index);
         for (let i = index - 9; i >= index - (index%8) - index%8*8 && i >= 0; i -= 9) {
             const currPin = squares[i].color;
-            console.log(currPin);
 
             if (currPin === "transparent" || currPin === color) break;
             squares[i].color = color;
@@ -254,7 +251,6 @@ function Board() {
 
         const validDirections = getValidDirection(index, currentPlayer);
 
-        console.log(validDirections);
         if (validDirections.length < 1) return;
 
         square.color = currentPlayer;

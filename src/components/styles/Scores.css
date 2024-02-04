@@ -1,0 +1,22 @@
+.Scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+
+    border: 1px solid white;
+}
+
+.Scores-Headline {
+    grid-column: 1/-1;
+    padding: 20px;
+    margin: 0;
+}
+
+.Score {
+    padding: 20px;
+}
+
+.Score p {
+    margin-bottom: 0;
+    font-size: 1.5rem;
+}

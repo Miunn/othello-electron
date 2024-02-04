@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Square from "./Square";
 import CurrentPlayer from "./CurrentPlayer";
 import "./styles/Board.css";
+import Scores from "./Scores";
 
 type SquareType = {
     index: number,
@@ -24,6 +25,9 @@ function Board() {
 
     const [squares, setSquares] = useState<SquareType[]>([]);
     const [currentPlayer, setCurrentPlayer] = useState<"black" | "white">("black");
+    const [blackPins, setBlackPins] = useState<number>(2);
+    const [whitePins, setWhitePins] = useState<number>(2);
+    const [isHighlightValid, setHighlightValid] = useState<boolean>(false);
 
     const initSquares = (): SquareType[] => {
         let sqs: SquareType[] = [];
@@ -131,7 +135,7 @@ function Board() {
         return directions;
     }
 
-    const switchPins = (direction: DirectionType, color: 'black' | 'white', index: number, pins: SquareType[]): SquareType[] => {
+    const switchPins = (direction: DirectionType, color: 'black' | 'white', index: number, pins: SquareType[]): [SquareType[], number] => {
         switch (direction) {
             case DirectionType.TOP:
                 return switchPinsTop(color, index, pins);
@@ -158,92 +162,116 @@ function Board() {
                 return switchPinsDTL(color, index, pins);
 
             default:
-                return pins;
+                return [pins, 0];
         }
     }
 
-    const switchPinsTop = (color: "black" | "white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsTop = (color: "black" | "white", index: number, pins: SquareType[]): [SquareType[], number] => {
+        let switchedAmount = 0;
         for (let i = index - 8; i >= 0; i -= 8) {
             const currPin = pins[i].color;
             if (currPin === "transparent" || currPin === color) break;
 
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsBottom = (color: "black" | "white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsBottom = (color: "black" | "white", index: number, pins: SquareType[]): [SquareType[], number] => {
+        let switchedAmount = 0;
         for (let i = index + 8; i < 64; i += 8) {
             const currPin = pins[i].color;
             if (currPin === "transparent" || currPin === color) break;
 
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsLeft = (color: "black" | "white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsLeft = (color: "black" | "white", index: number, pins: SquareType[]): [SquareType[], number] => {
+        let switchedAmount = 0;
         for (let i = index - 1; i >= index - (index % 8); i--) {
             const currPin = pins[i].color;
             if (currPin === "transparent" || currPin === color) break;
 
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsRight = (color: "black" | "white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsRight = (color: "black" | "white", index: number, pins: SquareType[]): [SquareType[], number] => {
+        let switchedAmount = 0;
         for (let i = index + 1; i < index + 8 - (index % 8); i++) {
             const currPin = pins[i].color;
             if (currPin === "transparent" || currPin === color) break;
 
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsDTR = (color: "black" | "white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsDTR = (color: "black" | "white", index: number, pins: SquareType[]): [SquareType[], number] => {
         // DTR
+        let switchedAmount = 0;
         for (let i = index - 7; i > index + 8 - (index % 8) - (7-index%8)*8 && i >= 0; i -= 7) {
             const currPin = pins[i].color;
             if (currPin === "transparent" || currPin === color) break;
 
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsDBR = (color: "black"|"white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsDBR = (color: "black"|"white", index: number, pins: SquareType[]): [SquareType[], number] => {
         // DBR
+        let switchedAmount = 0;
         for (let i = index + 9; i < index + 8 - (index % 8) + (7-index%8)*8 && i < 64; i += 9) {
             const currPin = pins[i].color;
 
             if (currPin === "transparent" || currPin === color) break;
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsDBL = (color: "black"|"white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsDBL = (color: "black"|"white", index: number, pins: SquareType[]): [SquareType[], number] => {
         // DBL
+        let switchedAmount = 0;
         for (let i = index + 7; i < index - (index%8) + index%8*8 && i < 64; i += 7) {
             const currPin = pins[i].color;
 
             if (currPin === "transparent" || currPin === color) break;
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
-    const switchPinsDTL = (color: "black"|"white", index: number, pins: SquareType[]): SquareType[] => {
+    const switchPinsDTL = (color: "black"|"white", index: number, pins: SquareType[]): [SquareType[], number] => {
         // DTL
+        let switchedAmount = 0;
         for (let i = index - 9; i >= index - (index%8) - index%8*8 && i >= 0; i -= 9) {
             const currPin = pins[i].color;
 
             if (currPin === "transparent" || currPin === color) break;
             pins[i].color = color;
+            switchedAmount++;
         }
-        return pins;
+
+        return [pins, switchedAmount];
     }
 
     const play = (index: number) => {
@@ -256,11 +284,22 @@ function Board() {
         if (validDirections.length < 1) return;
 
         let switchedSquares = [...squares];
+        let switchedAmount = 0;
         switchedSquares[index].color = currentPlayer;
         for (let direction of validDirections) {
-            switchPins(direction, currentPlayer, index, switchedSquares);
+            const [switchedSquaresDirection, switchedAmountDirection] = switchPins(direction, currentPlayer, index, switchedSquares);
+            switchedSquares = switchedSquaresDirection;
+            switchedAmount += switchedAmountDirection;
         }
         setSquares(switchedSquares);
+    
+        if (currentPlayer === "black") {
+            setBlackPins(blackPins+switchedAmount+1);
+            setWhitePins(whitePins-switchedAmount);
+        } else {
+            setBlackPins(blackPins-switchedAmount);
+            setWhitePins(whitePins+switchedAmount+1);
+        }
 
         setCurrentPlayer(currentPlayer === "black" ? "white" : "black");
     }
@@ -291,15 +330,30 @@ function Board() {
     useEffect(() => {
         if (squares.length === 0) return;
 
+        if (!isHighlightValid) {
+            console.log("Hide");
+            const newHighLight = squares.map((sq): SquareType => {;
+                return {
+                    ...sq,
+                    highlightColor: "transparent",
+                }
+            });
+            setSquares(newHighLight);
+            return;
+        }
+
         // If we run it on squares empty (before initial setSquares finishes)
         // This will map on an empty array and setSquares with that empty array
         // Overwriting the init setSquares
         highlightValidMoves();
-    }, [currentPlayer]);
+    }, [currentPlayer, isHighlightValid]);
 
     return (
         <div className="Board">
+            <div style={{alignSelf: "flex-start"}}>
             <CurrentPlayer defaultPlayer={currentPlayer} />
+            <Scores blackPins={blackPins} whitePins={whitePins} />
+            </div>
 
             <div className="Board-Wrapper">
                 {squares.map((sq) =>
@@ -311,6 +365,11 @@ function Board() {
                         onClickCallback={play}
                     />
                 )}
+            </div>
+
+            <div>
+                <label htmlFor="isHighlightValidCheckbox">Highlight valid moves</label>
+                <input type="checkbox" name="isHighlightValid" id="isHighlightValidCheckbox" onChange={(e) => setHighlightValid(e.target.checked)} />
             </div>
         </div>
     )

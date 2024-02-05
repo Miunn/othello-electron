@@ -1,4 +1,3 @@
-import React, { MouseEventHandler, SetStateAction, useEffect, useState } from "react";
 import Pin from "./Pin";
 import "./styles/Square.css";
 

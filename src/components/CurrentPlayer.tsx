@@ -1,4 +1,3 @@
-import React from "react";
 import Pin from "./Pin";
 import "./styles/CurrentPlayer.css";
 

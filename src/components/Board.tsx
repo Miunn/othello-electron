@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Square from "./Square";
 import CurrentPlayer from "./CurrentPlayer";
 import "./styles/Board.css";
@@ -42,7 +42,6 @@ function Board() {
             });
         }
 
-        console.log(sqs);
         return sqs;
     }
 
@@ -315,7 +314,6 @@ function Board() {
             if (squares[i].color !== "transparent") return updated;
             if (getValidDirection(i, currentPlayer).length === 0) return updated;
 
-            console.log("should update highlight color at", i, "to", currentPlayer);
             updated.highlightColor = currentPlayer;
             return updated
         });
@@ -324,14 +322,12 @@ function Board() {
 
     useEffect(() => {
         setSquares(initSquares());
-        console.log("Sat squares", squares);
     }, []);
 
     useEffect(() => {
         if (squares.length === 0) return;
 
         if (!isHighlightValid) {
-            console.log("Hide");
             const newHighLight = squares.map((sq): SquareType => {;
                 return {
                     ...sq,

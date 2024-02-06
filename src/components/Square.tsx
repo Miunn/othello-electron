@@ -13,7 +13,7 @@ function Square({onClickCallback, color, index, highlightColor}: Props) {
     return (
         <div className="Square" onClick={() => onClickCallback(index)} style={{position: "relative"}}>
             {color !== "transparent" ? <Pin color={color} /> : null}
-            <div style={{opacity: 0.5}}>
+            <div style={{opacity: 0.4}}>
                 {highlightColor !== "transparent" ? <Pin color={highlightColor} /> : null}
             </div>
         </div>

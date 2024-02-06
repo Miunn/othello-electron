@@ -3,6 +3,7 @@
   "name": "othello-electron",
   "version": "0.1.0",
   "author": "Miunn",
+  "email": "remi@remicaulier.fr",
   "description": "Othello gaming interface",
   "private": true,
   "homepage": "./",
@@ -67,20 +68,23 @@
     "wait-on": "^7.2.0"
   },
   "build": {
-     "appId": "com.miunn.othello",
-     "productName": "Othello gaming app",
-     "files": ["build/**/*", "node_modules/**/*"],
-     "directories": {
-       "buildResources": "public"
-     },
-     "mac": {
-       "target": "dmg"
-     },
-     "win": {
-       "target": "nsis"
-     },
-     "linux": {
-       "target": "deb"
-     }
-  }  
+    "appId": "com.miunn.othello",
+    "productName": "Othello gaming app",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb"
+    }
+  }
 }

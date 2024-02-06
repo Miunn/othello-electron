@@ -2,11 +2,12 @@
   "type": "module",
   "name": "othello-electron",
   "version": "0.1.0",
-  "description": "Othello gaming interface",
-  "main": "main.js",
   "author": "Miunn",
-  "license": "MIT",
+  "description": "Othello gaming interface",
   "private": true,
+  "homepage": "./",
+  "main": "public/electron.js",
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -29,7 +30,11 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "electron:start": "concurrently -k \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electronmon .\"",
+    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "eslintConfig": {
     "extends": [
@@ -39,14 +44,10 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 electron version"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 electron version"
     ]
   },
   "devDependencies": {
@@ -57,16 +58,29 @@
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^28.2.1",
-    "electron-is-dev": "^3.0.1"
+    "electron-builder": "^24.9.1",
+    "electron-is-dev": "^3.0.1",
+    "electronmon": "^2.0.2",
+    "wait-on": "^7.2.0"
   },
-  "electron": "electron .",
-  "dist": "electron-builder",
   "build": {
-    "appId": "com.miunn.othello",
-    "productName": "Othello",
-    "directories": {
-      "output": "dist"
-    }
-  }
+     "appId": "com.miunn.othello",
+     "productName": "Othello gaming app",
+     "files": ["build/**/*", "node_modules/**/*"],
+     "directories": {
+       "buildResources": "public"
+     },
+     "mac": {
+       "target": "dmg"
+     },
+     "win": {
+       "target": "nsis"
+     },
+     "linux": {
+       "target": "deb"
+     }
+  }  
 }
